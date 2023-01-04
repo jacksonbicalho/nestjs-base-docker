@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  nest:
+    env_file:
+    - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: ${NODE_ENV}
+      args:
+        - USER_UID=${USER_UID}
+        - NODE_ENV=${NODE_ENV}
+        - HOST_PORT=${HOST_PORT}
+        - WORK_DIR=${WORK_DIR}
+    container_name: docker-nestjs-base-${NODE_ENV}
+    image: ${IMAGE_NAME}-${NODE_ENV}:${IMAGE_TAG}
+
+    volumes:
+      - ./:${WORK_DIR}
+    ports:
+      - ${HOST_PORT}:3000
+    networks:
+      - nesjs-network
+
+networks:
+  nesjs-network:
